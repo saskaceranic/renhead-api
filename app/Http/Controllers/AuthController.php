@@ -79,8 +79,8 @@ class AuthController extends Controller
             Auth::user()->currentAccessToken()->delete();
         } catch (\Exception $e) {
             return response()->json([
-                'message' => Response::$statusTexts[Response::HTTP_METHOD_NOT_ALLOWED],
-                'code' => Response::HTTP_METHOD_NOT_ALLOWED
+                'message' => Response::$statusTexts[Response::HTTP_BAD_REQUEST],
+                'code' => Response::HTTP_BAD_REQUEST
             ]);
         }
 

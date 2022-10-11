@@ -2,6 +2,8 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Repositories\PaymentApprovalRepository;
+use App\Http\Requests\InsertPaymentApprovalRequest;
 use App\Http\Requests\StorePaymentApprovalRequest;
 use App\Http\Requests\UpdatePaymentApprovalRequest;
 use App\Http\Resources\PaymentApprovalCollection;
@@ -9,6 +11,7 @@ use App\Http\Resources\PaymentApprovalResource;
 use App\Models\PaymentApproval;
 use Illuminate\Http\Resources\Json\JsonResource;
 use Illuminate\Http\Response;
+use Illuminate\Support\Facades\Auth;
 
 /**
  * Class PaymentApprovalController
@@ -17,6 +20,21 @@ use Illuminate\Http\Response;
  */
 class PaymentApprovalController extends Controller
 {
+    /**
+     * @var PaymentApprovalRepository
+     */
+    protected $approvalRepository;
+
+    /**
+     * PaymentApprovalController constructor.
+     *
+     * @param PaymentApprovalRepository $approvalRepository
+     */
+    public function __construct(PaymentApprovalRepository $approvalRepository)
+    {
+        $this->middleware('type:admin', ['except' => 'paymentApproval']);
+        $this->approvalRepository = $approvalRepository;
+    }
 
     /**
      * @return PaymentApprovalCollection
@@ -84,8 +102,8 @@ class PaymentApprovalController extends Controller
             $paymentApproval->delete();
         } catch (\Exception $e) {
             return response()->json([
-                'message' => Response::$statusTexts[Response::HTTP_METHOD_NOT_ALLOWED],
-                'code' => Response::HTTP_METHOD_NOT_ALLOWED
+                'message' => Response::$statusTexts[Response::HTTP_BAD_REQUEST],
+                'code' => Response::HTTP_BAD_REQUEST
             ]);
         }
 
@@ -93,5 +111,37 @@ class PaymentApprovalController extends Controller
             'message' => Response::$statusTexts[Response::HTTP_OK],
             'code' => Response::HTTP_OK
         ]);
+    }
+
+
+    /**
+     * @param InsertPaymentApprovalRequest $request
+     *
+     * @return PaymentApprovalResource|\Illuminate\Http\JsonResponse
+     */
+    public function paymentApproval(InsertPaymentApprovalRequest $request)
+    {
+        $user = Auth::user();
+
+        if (!$user->isApprover()) {
+            return response()->json([
+                'message' => Response::$statusTexts[Response::HTTP_UNAUTHORIZED],
+                'code' => Response::HTTP_UNAUTHORIZED
+            ]);
+        }
+
+        try {
+            $approval = $this->approvalRepository->insertPaymentApproval(
+                $user->id,
+                $request->only('payment_id', 'payment_type', 'status')
+            );
+        } catch (\Exception $e) {
+            return response()->json([
+                'message' => Response::$statusTexts[Response::HTTP_BAD_REQUEST],
+                'code' => Response::HTTP_BAD_REQUEST
+            ]);
+        }
+
+        return new PaymentApprovalResource($approval);
     }
 }

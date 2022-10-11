@@ -17,6 +17,13 @@ use Illuminate\Http\Response;
  */
 class PaymentController extends Controller
 {
+    /**
+     * PaymentController constructor.
+     */
+    public function __construct()
+    {
+        $this->middleware('type:admin');
+    }
 
     /**
      * @return PaymentCollection
@@ -81,8 +88,8 @@ class PaymentController extends Controller
             $payment->delete();
         } catch (\Exception $e) {
             return response()->json([
-                'message' => Response::$statusTexts[Response::HTTP_METHOD_NOT_ALLOWED],
-                'code' => Response::HTTP_METHOD_NOT_ALLOWED
+                'message' => Response::$statusTexts[Response::HTTP_BAD_REQUEST],
+                'code' => Response::HTTP_BAD_REQUEST
             ]);
         }
 

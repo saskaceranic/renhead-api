@@ -14,6 +14,14 @@ use Illuminate\Http\Response;
 class UserController extends Controller
 {
     /**
+     * UserController constructor.
+     */
+    public function __construct()
+    {
+        $this->middleware('type:admin');
+    }
+
+    /**
      * @return UserCollection
      */
     public function getAllApprovers()

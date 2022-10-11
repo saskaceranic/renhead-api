@@ -2,11 +2,18 @@
 
 namespace App\Exceptions;
 
+use Illuminate\Auth\Access\AuthorizationException;
+use Illuminate\Auth\AuthenticationException;
+use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Foundation\Exceptions\Handler as ExceptionHandler;
-use Illuminate\Http\Response;
-use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
+use Illuminate\Validation\ValidationException;
 use Throwable;
 
+/**
+ * Class Handler
+ *
+ * @package App\Exceptions
+ */
 class Handler extends ExceptionHandler
 {
     /**
@@ -38,19 +45,29 @@ class Handler extends ExceptionHandler
         'password_confirmation',
     ];
 
-    /**
-     * Register the exception handling callbacks for the application.
-     *
-     * @return void
-     */
     public function register()
     {
-        $this->renderable(function (Throwable $e, $request) {
-            if ($request->is('api/*')) {
-                return response()->json([
-                    'message' => $e->getMessage()
-                ], 404);
-            }
+        $this->reportable(function (Throwable $e) {
         });
+    }
+
+    public function render($request, Throwable $e)
+    {
+        if ($request->is('api/*')) {
+            $responseCode = 500;
+            $responseData['message'] = $e->getMessage();
+            if ($e instanceof ModelNotFoundException) {
+                $responseCode = 404;
+            } elseif ($e instanceof ValidationException) {
+                $responseCode = 422;
+                $responseData['errors'] = $e->errors();
+            } else if ($e instanceof AuthorizationException || $e instanceof AuthenticationException) {
+                $responseCode = 403;
+            }
+
+            return response()->json($responseData, $responseCode);
+        }
+
+        return parent::render($request, $e);
     }
 }
