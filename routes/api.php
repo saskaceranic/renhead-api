@@ -24,8 +24,9 @@ Route::middleware(['auth:sanctum'])->group(function () {
     Route::resource('travel-payments', App\Http\Controllers\TravelPaymentController::class);
     Route::resource('payment-approvals', App\Http\Controllers\PaymentApprovalController::class);
 
-    Route::get('/users/approver', [\App\Http\Controllers\UserController::class, 'getAllApprovers']);
-    Route::post('approval', [App\Http\Controllers\PaymentApprovalController::class, 'paymentApproval']);
+    Route::get('/users/approver', [App\Http\Controllers\UserController::class, 'getAllApprovers']);
+    Route::post('/payment/approval', [App\Http\Controllers\PaymentApprovalController::class, 'paymentApproval']);
+    Route::get('/payment/report', [App\Http\Controllers\PaymentController::class, 'paymentReport']);
 });
 
 Route::post('/register', [App\Http\Controllers\AuthController::class, 'register'])->name('register');

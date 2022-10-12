@@ -13,6 +13,11 @@ use Illuminate\Http\Response;
 /**
  * Class TravelPaymentController
  *
+ * @OA\Schema(
+ *      schema="Travel Payments",
+ *      type="object"
+ * )
+ *
  * @package App\Http\Controllers
  */
 class TravelPaymentController extends Controller
@@ -26,6 +31,15 @@ class TravelPaymentController extends Controller
     }
 
     /**
+     *
+     * @OA\Get(
+     *     path="/travel-payments",
+     *     tags={"Travel Payments"},
+     *     summary="Get",
+     *     @OA\Response(response="200", description="success",
+     *          @OA\JsonContent(ref="#/components/schemas/Travel Payments")))
+     * )
+     *
      * @return TravelPaymentCollection
      */
     public function index()
@@ -45,6 +59,39 @@ class TravelPaymentController extends Controller
     /**
      * @param StoreTravelPaymentRequest $request
      *
+     * @OA\Post(
+     *     path="/travel-payments",
+     *     tags={"Travel Payments"},
+     *     operationId="StoreTravelPayment",
+     *     @OA\Response(
+     *         response=201,
+     *         description="OK"
+     *     ),
+     *     @OA\Response(
+     *         response=400,
+     *         description="Bad Request"
+     *     ),
+     *     @OA\RequestBody(
+     *         description="Input data format",
+     *         @OA\MediaType(
+     *             mediaType="application/x-www-form-urlencoded",
+     *             @OA\Schema(
+     *                 type="object",
+     *                 @OA\Property(
+     *                     property="user_id",
+     *                     description="User ID",
+     *                     type="integer"
+     *                 ),
+     *                 @OA\Property(
+     *                     property="amount",
+     *                     description="Amount",
+     *                     type="integer"
+     *                 ),
+     *             )
+     *         )
+     *     )
+     * )
+     *
      * @return TravelPaymentResource
      */
     public function store(StoreTravelPaymentRequest $request)
@@ -57,6 +104,25 @@ class TravelPaymentController extends Controller
     /**
      * @param TravelPayment $payment
      *
+     * @OA\Get(
+     *     path="/travel-payments/{id}",
+     *     tags={"Travel Payments"},
+     *     summary="Get",
+     *     @OA\Parameter(
+     *        name="id",
+     *        in="path",
+     *        description="ID",
+     *        @OA\Schema(
+     *           type="integer",
+     *           format="int64"
+     *        ),
+     *        required=true,
+     *        example=1
+     *     ),
+     *     @OA\Response(response="200", description="success",
+     *          @OA\JsonContent(ref="#/components/schemas/Travel Payments")))
+     * )
+     *
      * @return TravelPaymentResource
      */
     public function show(TravelPayment $payment)
@@ -67,6 +133,39 @@ class TravelPaymentController extends Controller
     /**
      * @param UpdateTravelPaymentRequest $request
      * @param TravelPayment $travelPayment
+     *
+     * @OA\Put(
+     *     path="/travel-payments",
+     *     tags={"Travel Payments"},
+     *     operationId="UpdateTravelPayment",
+     *     @OA\Response(
+     *         response=200,
+     *         description="OK"
+     *     ),
+     *     @OA\Response(
+     *         response=400,
+     *         description="Bad Request"
+     *     ),
+     *     @OA\RequestBody(
+     *         description="Input data format",
+     *         @OA\MediaType(
+     *             mediaType="application/x-www-form-urlencoded",
+     *             @OA\Schema(
+     *                 type="object",
+     *                 @OA\Property(
+     *                     property="user_id",
+     *                     description="User ID",
+     *                     type="integer"
+     *                 ),
+     *                 @OA\Property(
+     *                     property="amount",
+     *                     description="Amount",
+     *                     type="integer"
+     *                 ),
+     *             )
+     *         )
+     *     )
+     * )
      *
      * @return TravelPaymentResource
      */
@@ -79,6 +178,31 @@ class TravelPaymentController extends Controller
 
     /**
      * @param TravelPayment $travelPayment
+     *
+     * @OA\Delete(
+     *     path="/travel-payments/{id}",
+     *     tags={"Travel Payments"},
+     *     summary="Delete",
+     *     operationId="DeleteTravelPayment",
+     *     @OA\Parameter(
+     *         name="id",
+     *         in="path",
+     *         description="Travel Payment ID to delete",
+     *         required=true,
+     *         @OA\Schema(
+     *             type="integer",
+     *             format="int64"
+     *         ),
+     *     ),
+     *     @OA\Response(
+     *         response=400,
+     *         description="Bad Request",
+     *     ),
+     *     @OA\Response(
+     *         response=200,
+     *         description="OK",
+     *     ),
+     * )
      *
      * @return JsonResource
      */

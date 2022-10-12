@@ -1,0 +1,679 @@
+{
+    "openapi": "3.0.0",
+    "info": {
+        "title": "Renhead API",
+        "description": "Class Controller",
+        "version": "1.0.0"
+    },
+    "paths": {
+        "/register": {
+            "post": {
+                "tags": [
+                    "Auth"
+                ],
+                "operationId": "Register",
+                "requestBody": {
+                    "description": "Input data format",
+                    "content": {
+                        "application/x-www-form-urlencoded": {
+                            "schema": {
+                                "properties": {
+                                    "first_name": {
+                                        "description": "First Name",
+                                        "type": "string"
+                                    },
+                                    "last_name": {
+                                        "description": "Last Name",
+                                        "type": "string"
+                                    },
+                                    "password": {
+                                        "description": "Password",
+                                        "type": "string"
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "422": {
+                        "description": "Unprocessable Entity"
+                    },
+                    "200": {
+                        "description": "OK"
+                    }
+                }
+            }
+        },
+        "/login": {
+            "post": {
+                "tags": [
+                    "Auth"
+                ],
+                "operationId": "Login",
+                "requestBody": {
+                    "description": "Input data format",
+                    "content": {
+                        "application/x-www-form-urlencoded": {
+                            "schema": {
+                                "properties": {
+                                    "first_name": {
+                                        "description": "First Name",
+                                        "type": "string"
+                                    },
+                                    "password": {
+                                        "description": "Password",
+                                        "type": "string"
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "401": {
+                        "description": "Unauthorised"
+                    },
+                    "200": {
+                        "description": "OK"
+                    }
+                }
+            }
+        },
+        "/logout": {
+            "post": {
+                "tags": [
+                    "Auth"
+                ],
+                "operationId": "Logout",
+                "responses": {
+                    "400": {
+                        "description": "Bad Request"
+                    },
+                    "200": {
+                        "description": "OK"
+                    }
+                }
+            }
+        },
+        "/payment-approvals": {
+            "get": {
+                "tags": [
+                    "Payment Approvals"
+                ],
+                "summary": "Get",
+                "operationId": "97e6a3ec4cb36a31f2403bc242ad787d",
+                "responses": {
+                    "200": {
+                        "description": "success",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/Payment Approvals"
+                                }
+                            }
+                        }
+                    }
+                }
+            },
+            "put": {
+                "tags": [
+                    "Payment Approvals"
+                ],
+                "operationId": "Update",
+                "requestBody": {
+                    "description": "Input data format",
+                    "content": {
+                        "application/x-www-form-urlencoded": {
+                            "schema": {
+                                "properties": {
+                                    "user_id": {
+                                        "description": "User ID",
+                                        "type": "integer"
+                                    },
+                                    "payment_id": {
+                                        "description": "Payment ID",
+                                        "type": "integer"
+                                    },
+                                    "payment_type": {
+                                        "description": "Payment Type",
+                                        "type": "string"
+                                    },
+                                    "status": {
+                                        "description": "Status",
+                                        "type": "string",
+                                        "enum": [
+                                            "approver",
+                                            "admin"
+                                        ]
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "OK"
+                    },
+                    "400": {
+                        "description": "Bad Request"
+                    }
+                }
+            },
+            "post": {
+                "tags": [
+                    "Payment Approvals"
+                ],
+                "operationId": "Store",
+                "requestBody": {
+                    "description": "Input data format",
+                    "content": {
+                        "application/x-www-form-urlencoded": {
+                            "schema": {
+                                "properties": {
+                                    "user_id": {
+                                        "description": "User ID",
+                                        "type": "integer"
+                                    },
+                                    "payment_id": {
+                                        "description": "Payment ID",
+                                        "type": "integer"
+                                    },
+                                    "payment_type": {
+                                        "description": "Payment Type",
+                                        "type": "string"
+                                    },
+                                    "status": {
+                                        "description": "Status",
+                                        "type": "string",
+                                        "enum": [
+                                            "approver",
+                                            "admin"
+                                        ]
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "201": {
+                        "description": "OK"
+                    },
+                    "400": {
+                        "description": "Bad Request"
+                    }
+                }
+            }
+        },
+        "/payment-approvals/{id}": {
+            "get": {
+                "tags": [
+                    "Payment Approvals"
+                ],
+                "summary": "Get",
+                "operationId": "0809a6f5542bd33a90ed1adaf834733c",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "description": "ID",
+                        "required": true,
+                        "schema": {
+                            "type": "integer",
+                            "format": "int64"
+                        },
+                        "example": 1
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "success",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/Payment Approvals"
+                                }
+                            }
+                        }
+                    }
+                }
+            },
+            "delete": {
+                "tags": [
+                    "Payment Approvals"
+                ],
+                "summary": "Delete",
+                "operationId": "Delete",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "description": "Payment Approval ID to delete",
+                        "required": true,
+                        "schema": {
+                            "type": "integer",
+                            "format": "int64"
+                        }
+                    }
+                ],
+                "responses": {
+                    "400": {
+                        "description": "Bad Request"
+                    },
+                    "200": {
+                        "description": "OK"
+                    }
+                }
+            }
+        },
+        "/payment/approval": {
+            "post": {
+                "tags": [
+                    "Payment Approvals"
+                ],
+                "operationId": "Insert",
+                "requestBody": {
+                    "description": "Input data format",
+                    "content": {
+                        "application/x-www-form-urlencoded": {
+                            "schema": {
+                                "properties": {
+                                    "payment_id": {
+                                        "description": "Payment ID",
+                                        "type": "integer"
+                                    },
+                                    "payment_type": {
+                                        "description": "Payment Type",
+                                        "type": "string"
+                                    },
+                                    "status": {
+                                        "description": "Status",
+                                        "type": "string",
+                                        "enum": [
+                                            "approver",
+                                            "admin"
+                                        ]
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "OK"
+                    },
+                    "400": {
+                        "description": "Bad Request"
+                    }
+                }
+            }
+        },
+        "/payments": {
+            "get": {
+                "tags": [
+                    "Payments"
+                ],
+                "summary": "Get",
+                "operationId": "65567ad73dd4b0cc01c4856a6bb7e600",
+                "responses": {
+                    "200": {
+                        "description": "success",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/Payments"
+                                }
+                            }
+                        }
+                    }
+                }
+            },
+            "put": {
+                "tags": [
+                    "Payments"
+                ],
+                "operationId": "UpdatePayment",
+                "requestBody": {
+                    "description": "Input data format",
+                    "content": {
+                        "application/x-www-form-urlencoded": {
+                            "schema": {
+                                "properties": {
+                                    "user_id": {
+                                        "description": "User ID",
+                                        "type": "integer"
+                                    },
+                                    "total_amount": {
+                                        "description": "Total Amount",
+                                        "type": "integer"
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "OK"
+                    },
+                    "400": {
+                        "description": "Bad Request"
+                    }
+                }
+            },
+            "post": {
+                "tags": [
+                    "Payments"
+                ],
+                "operationId": "StorePayment",
+                "requestBody": {
+                    "description": "Input data format",
+                    "content": {
+                        "application/x-www-form-urlencoded": {
+                            "schema": {
+                                "properties": {
+                                    "user_id": {
+                                        "description": "User ID",
+                                        "type": "integer"
+                                    },
+                                    "total_amount": {
+                                        "description": "Total Amount",
+                                        "type": "integer"
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "201": {
+                        "description": "OK"
+                    },
+                    "400": {
+                        "description": "Bad Request"
+                    }
+                }
+            }
+        },
+        "/payments/{id}": {
+            "get": {
+                "tags": [
+                    "Payments"
+                ],
+                "summary": "Get",
+                "operationId": "a4207c19fecbebc99932a8348b19adf1",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "description": "ID",
+                        "required": true,
+                        "schema": {
+                            "type": "integer",
+                            "format": "int64"
+                        },
+                        "example": 1
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "success",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/Payments"
+                                }
+                            }
+                        }
+                    }
+                }
+            },
+            "delete": {
+                "tags": [
+                    "Payments"
+                ],
+                "summary": "Delete",
+                "operationId": "DeletePayment",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "description": "Payment ID to delete",
+                        "required": true,
+                        "schema": {
+                            "type": "integer",
+                            "format": "int64"
+                        }
+                    }
+                ],
+                "responses": {
+                    "400": {
+                        "description": "Bad Request"
+                    },
+                    "200": {
+                        "description": "OK"
+                    }
+                }
+            }
+        },
+        "/payment/report": {
+            "get": {
+                "tags": [
+                    "Payments"
+                ],
+                "summary": "Get",
+                "operationId": "1690ef08fd9535223095b84c3fd2aeed",
+                "responses": {
+                    "200": {
+                        "description": "OK"
+                    }
+                }
+            }
+        },
+        "/travel-payments": {
+            "get": {
+                "tags": [
+                    "Travel Payments"
+                ],
+                "summary": "Get",
+                "operationId": "f5d37d62809198e0a698cc2eba43a867",
+                "responses": {
+                    "200": {
+                        "description": "success",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/Travel Payments"
+                                }
+                            }
+                        }
+                    }
+                }
+            },
+            "put": {
+                "tags": [
+                    "Travel Payments"
+                ],
+                "operationId": "UpdateTravelPayment",
+                "requestBody": {
+                    "description": "Input data format",
+                    "content": {
+                        "application/x-www-form-urlencoded": {
+                            "schema": {
+                                "properties": {
+                                    "user_id": {
+                                        "description": "User ID",
+                                        "type": "integer"
+                                    },
+                                    "amount": {
+                                        "description": "Amount",
+                                        "type": "integer"
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "OK"
+                    },
+                    "400": {
+                        "description": "Bad Request"
+                    }
+                }
+            },
+            "post": {
+                "tags": [
+                    "Travel Payments"
+                ],
+                "operationId": "StoreTravelPayment",
+                "requestBody": {
+                    "description": "Input data format",
+                    "content": {
+                        "application/x-www-form-urlencoded": {
+                            "schema": {
+                                "properties": {
+                                    "user_id": {
+                                        "description": "User ID",
+                                        "type": "integer"
+                                    },
+                                    "amount": {
+                                        "description": "Amount",
+                                        "type": "integer"
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "201": {
+                        "description": "OK"
+                    },
+                    "400": {
+                        "description": "Bad Request"
+                    }
+                }
+            }
+        },
+        "/travel-payments/{id}": {
+            "get": {
+                "tags": [
+                    "Travel Payments"
+                ],
+                "summary": "Get",
+                "operationId": "716359b98c9f8cd7e8aebb7424afc3f7",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "description": "ID",
+                        "required": true,
+                        "schema": {
+                            "type": "integer",
+                            "format": "int64"
+                        },
+                        "example": 1
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "success",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/Travel Payments"
+                                }
+                            }
+                        }
+                    }
+                }
+            },
+            "delete": {
+                "tags": [
+                    "Travel Payments"
+                ],
+                "summary": "Delete",
+                "operationId": "DeleteTravelPayment",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "description": "Travel Payment ID to delete",
+                        "required": true,
+                        "schema": {
+                            "type": "integer",
+                            "format": "int64"
+                        }
+                    }
+                ],
+                "responses": {
+                    "400": {
+                        "description": "Bad Request"
+                    },
+                    "200": {
+                        "description": "OK"
+                    }
+                }
+            }
+        },
+        "/users/approver": {
+            "get": {
+                "tags": [
+                    "Approvers"
+                ],
+                "summary": "Get",
+                "operationId": "5cf6dcfcdd9eced580db0e75d6ee2edb",
+                "responses": {
+                    "200": {
+                        "description": "success",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/Users"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    },
+    "components": {
+        "schemas": {
+            "Auth": {
+                "description": "Class AuthController",
+                "type": "object"
+            },
+            "Payment Approvals": {
+                "description": "Class PaymentApprovalController",
+                "type": "object"
+            },
+            "Payments": {
+                "description": "Class PaymentController",
+                "type": "object"
+            },
+            "Travel Payments": {
+                "description": "Class TravelPaymentController",
+                "type": "object"
+            },
+            "Users": {
+                "description": "Class UserController",
+                "type": "object"
+            }
+        }
+    }
+}

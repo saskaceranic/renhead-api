@@ -10,6 +10,11 @@ use Illuminate\Routing\Controller as BaseController;
 /**
  * Class Controller
  *
+ * @OA\Info(
+ *    title="Renhead API",
+ *    version="1.0.0",
+ * )
+ *
  * @package App\Http\Controllers
  */
 class Controller extends BaseController

@@ -9,6 +9,11 @@ use Illuminate\Http\Response;
 /**
  * Class UserController
  *
+ * @OA\Schema(
+ *      schema="Users",
+ *      type="object"
+ * )
+ *
  * @package App\Http\Controllers
  */
 class UserController extends Controller
@@ -22,6 +27,15 @@ class UserController extends Controller
     }
 
     /**
+     *
+     * @OA\Get(
+     *     path="/users/approver",
+     *     tags={"Approvers"},
+     *     summary="Get",
+     *     @OA\Response(response="200", description="success",
+     *          @OA\JsonContent(ref="#/components/schemas/Users")))
+     * )
+     *
      * @return UserCollection
      */
     public function getAllApprovers()

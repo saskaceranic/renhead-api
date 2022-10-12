@@ -2,7 +2,7 @@
 
 namespace App\Http\Controllers;
 
-use App\Http\Repositories\PaymentApprovalRepository;
+use App\Http\Repositories\PaymentRepository;
 use App\Http\Requests\InsertPaymentApprovalRequest;
 use App\Http\Requests\StorePaymentApprovalRequest;
 use App\Http\Requests\UpdatePaymentApprovalRequest;
@@ -16,33 +16,47 @@ use Illuminate\Support\Facades\Auth;
 /**
  * Class PaymentApprovalController
  *
+ * @OA\Schema(
+ *      schema="Payment Approvals",
+ *      type="object"
+ * )
+ *
  * @package App\Http\Controllers
  */
 class PaymentApprovalController extends Controller
 {
     /**
-     * @var PaymentApprovalRepository
+     * @var PaymentRepository
      */
-    protected $approvalRepository;
+    protected $paymentRepository;
 
     /**
      * PaymentApprovalController constructor.
      *
-     * @param PaymentApprovalRepository $approvalRepository
+     * @param PaymentRepository $paymentRepository
      */
-    public function __construct(PaymentApprovalRepository $approvalRepository)
+    public function __construct(PaymentRepository $paymentRepository)
     {
-        $this->middleware('type:admin', ['except' => 'paymentApproval']);
-        $this->approvalRepository = $approvalRepository;
+        $this->middleware('type:admin', ['except' => ['paymentApproval']]);
+        $this->paymentRepository = $paymentRepository;
     }
 
     /**
+     *
+     * @OA\Get(
+     *     path="/payment-approvals",
+     *     tags={"Payment Approvals"},
+     *     summary="Get",
+     *     @OA\Response(response="200", description="success",
+     *          @OA\JsonContent(ref="#/components/schemas/Payment Approvals")))
+     * )
+     *
      * @return PaymentApprovalCollection
      */
     public function index()
     {
         try {
-            $paymentApproval = PaymentApproval::with(['user', 'payment'])->paginate();
+            $paymentApproval = PaymentApproval::with(['user', 'payment', 'travelPayments'])->paginate();
         } catch (\Exception $e) {
             return response()->json([
                 'message' => Response::$statusTexts[Response::HTTP_NOT_FOUND],
@@ -55,6 +69,50 @@ class PaymentApprovalController extends Controller
 
     /**
      * @param StorePaymentApprovalRequest $request
+     *
+     * @OA\Post(
+     *     path="/payment-approvals",
+     *     tags={"Payment Approvals"},
+     *     operationId="Store",
+     *     @OA\Response(
+     *         response=201,
+     *         description="OK"
+     *     ),
+     *     @OA\Response(
+     *         response=400,
+     *         description="Bad Request"
+     *     ),
+     *     @OA\RequestBody(
+     *         description="Input data format",
+     *         @OA\MediaType(
+     *             mediaType="application/x-www-form-urlencoded",
+     *             @OA\Schema(
+     *                 type="object",
+     *                 @OA\Property(
+     *                     property="user_id",
+     *                     description="User ID",
+     *                     type="integer"
+     *                 ),
+     *                 @OA\Property(
+     *                     property="payment_id",
+     *                     description="Payment ID",
+     *                     type="integer"
+     *                 ),
+     *                 @OA\Property(
+     *                     property="payment_type",
+     *                     description="Payment Type",
+     *                     type="string"
+     *                 ),
+     *                 @OA\Property(
+     *                     property="status",
+     *                     description="Status",
+     *                     type="string",
+     *                     enum={"approver", "admin"}
+     *                 ),
+     *             )
+     *         )
+     *     )
+     * )
      *
      * @return PaymentApprovalResource
      */
@@ -70,6 +128,25 @@ class PaymentApprovalController extends Controller
     /**
      * @param PaymentApproval $paymentApproval
      *
+     * @OA\Get(
+     *     path="/payment-approvals/{id}",
+     *     tags={"Payment Approvals"},
+     *     summary="Get",
+     *     @OA\Parameter(
+     *        name="id",
+     *        in="path",
+     *        description="ID",
+     *        @OA\Schema(
+     *           type="integer",
+     *           format="int64"
+     *        ),
+     *        required=true,
+     *        example=1
+     *     ),
+     *     @OA\Response(response="200", description="success",
+     *          @OA\JsonContent(ref="#/components/schemas/Payment Approvals")))
+     * )
+     *
      * @return PaymentApprovalResource
      */
     public function show(PaymentApproval $paymentApproval)
@@ -80,6 +157,50 @@ class PaymentApprovalController extends Controller
     /**
      * @param UpdatePaymentApprovalRequest $request
      * @param PaymentApproval $paymentApproval
+     *
+     * @OA\Put(
+     *     path="/payment-approvals",
+     *     tags={"Payment Approvals"},
+     *     operationId="Update",
+     *     @OA\Response(
+     *         response=200,
+     *         description="OK"
+     *     ),
+     *     @OA\Response(
+     *         response=400,
+     *         description="Bad Request"
+     *     ),
+     *     @OA\RequestBody(
+     *         description="Input data format",
+     *         @OA\MediaType(
+     *             mediaType="application/x-www-form-urlencoded",
+     *             @OA\Schema(
+     *                 type="object",
+     *                 @OA\Property(
+     *                     property="user_id",
+     *                     description="User ID",
+     *                     type="integer"
+     *                 ),
+     *                 @OA\Property(
+     *                     property="payment_id",
+     *                     description="Payment ID",
+     *                     type="integer"
+     *                 ),
+     *                 @OA\Property(
+     *                     property="payment_type",
+     *                     description="Payment Type",
+     *                     type="string"
+     *                 ),
+     *                 @OA\Property(
+     *                     property="status",
+     *                     description="Status",
+     *                     type="string",
+     *                     enum={"approver", "admin"}
+     *                 ),
+     *             )
+     *         )
+     *     )
+     * )
      *
      * @return PaymentApprovalResource
      */
@@ -94,6 +215,30 @@ class PaymentApprovalController extends Controller
     /**
      * @param PaymentApproval $paymentApproval
      *
+     * @OA\Delete(
+     *     path="/payment-approvals/{id}",
+     *     tags={"Payment Approvals"},
+     *     summary="Delete",
+     *     operationId="Delete",
+     *     @OA\Parameter(
+     *         name="id",
+     *         in="path",
+     *         description="Payment Approval ID to delete",
+     *         required=true,
+     *         @OA\Schema(
+     *             type="integer",
+     *             format="int64"
+     *         ),
+     *     ),
+     *     @OA\Response(
+     *         response=400,
+     *         description="Bad Request",
+     *     ),
+     *     @OA\Response(
+     *         response=200,
+     *         description="OK",
+     *     ),
+     * )
      * @return JsonResource
      */
     public function destroy(PaymentApproval $paymentApproval)
@@ -117,6 +262,45 @@ class PaymentApprovalController extends Controller
     /**
      * @param InsertPaymentApprovalRequest $request
      *
+     * @OA\Post(
+     *     path="/payment/approval",
+     *     tags={"Payment Approvals"},
+     *     operationId="Insert",
+     *     @OA\Response(
+     *         response=200,
+     *         description="OK"
+     *     ),
+     *     @OA\Response(
+     *         response=400,
+     *         description="Bad Request"
+     *     ),
+     *     @OA\RequestBody(
+     *         description="Input data format",
+     *         @OA\MediaType(
+     *             mediaType="application/x-www-form-urlencoded",
+     *             @OA\Schema(
+     *                 type="object",
+     *                 @OA\Property(
+     *                     property="payment_id",
+     *                     description="Payment ID",
+     *                     type="integer"
+     *                 ),
+     *                 @OA\Property(
+     *                     property="payment_type",
+     *                     description="Payment Type",
+     *                     type="string"
+     *                 ),
+     *                 @OA\Property(
+     *                     property="status",
+     *                     description="Status",
+     *                     type="string",
+     *                     enum={"approver", "admin"}
+     *                 ),
+     *             )
+     *         )
+     *     )
+     * )
+     *
      * @return PaymentApprovalResource|\Illuminate\Http\JsonResponse
      */
     public function paymentApproval(InsertPaymentApprovalRequest $request)
@@ -131,7 +315,7 @@ class PaymentApprovalController extends Controller
         }
 
         try {
-            $approval = $this->approvalRepository->insertPaymentApproval(
+            $approval = $this->paymentRepository->insertPaymentApproval(
                 $user->id,
                 $request->only('payment_id', 'payment_type', 'status')
             );

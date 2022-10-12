@@ -35,4 +35,9 @@ class PaymentApproval extends Model
     {
         return $query->where('status', 'approved');
     }
+
+    public function scopeDisapprovedPayments($query)
+    {
+        return $query->where('status', 'disapproved');
+    }
 }

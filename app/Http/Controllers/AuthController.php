@@ -13,12 +13,55 @@ use Illuminate\Http\Response;
 /**
  * Class AuthController
  *
+ * @OA\Schema(
+ *      schema="Auth",
+ *      type="object"
+ * )
+ *
  * @package App\Http\Controllers
  */
 class AuthController extends Controller
 {
     /**
      * @param RegisterRequest $request
+     *
+     * @OA\Post(
+     *     path="/register",
+     *     tags={"Auth"},
+     *     operationId="Register",
+     *     @OA\Response(
+     *         response=422,
+     *         description="Unprocessable Entity"
+     *     ),
+     *     @OA\Response(
+     *         response=200,
+     *         description="OK"
+     *     ),
+     *     @OA\RequestBody(
+     *         description="Input data format",
+     *         @OA\MediaType(
+     *             mediaType="application/x-www-form-urlencoded",
+     *             @OA\Schema(
+     *                 type="object",
+     *                 @OA\Property(
+     *                     property="first_name",
+     *                     description="First Name",
+     *                     type="string"
+     *                 ),
+     *                 @OA\Property(
+     *                     property="last_name",
+     *                     description="Last Name",
+     *                     type="string"
+     *                 ),
+     *                 @OA\Property(
+     *                     property="password",
+     *                     description="Password",
+     *                     type="string"
+     *                 ),
+     *             )
+     *         )
+     *     )
+     * )
      *
      * @return JsonResponse
      */
@@ -43,6 +86,39 @@ class AuthController extends Controller
 
     /**
      * @param Request $request
+     *
+     * @OA\Post(
+     *     path="/login",
+     *     tags={"Auth"},
+     *     operationId="Login",
+     *     @OA\Response(
+     *         response=401,
+     *         description="Unauthorised"
+     *     ),
+     *     @OA\Response(
+     *         response=200,
+     *         description="OK"
+     *     ),
+     *     @OA\RequestBody(
+     *         description="Input data format",
+     *         @OA\MediaType(
+     *             mediaType="application/x-www-form-urlencoded",
+     *             @OA\Schema(
+     *                 type="object",
+     *                 @OA\Property(
+     *                     property="first_name",
+     *                     description="First Name",
+     *                     type="string"
+     *                 ),
+     *                 @OA\Property(
+     *                     property="password",
+     *                     description="Password",
+     *                     type="string"
+     *                 ),
+     *             )
+     *         )
+     *     )
+     * )
      *
      * @return AuthResource|JsonResponse
      */
@@ -71,6 +147,21 @@ class AuthController extends Controller
     }
 
     /**
+     *
+     * @OA\Post(
+     *     path="/logout",
+     *     tags={"Auth"},
+     *     operationId="Logout",
+     *     @OA\Response(
+     *         response=400,
+     *         description="Bad Request"
+     *     ),
+     *     @OA\Response(
+     *         response=200,
+     *         description="OK"
+     *     ),
+     * )
+     *
      * @return JsonResponse
      */
     public function logout()
