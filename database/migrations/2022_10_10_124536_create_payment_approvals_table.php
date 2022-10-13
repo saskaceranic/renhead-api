@@ -17,9 +17,7 @@ return new class extends Migration
             $table->id();
             $table->bigInteger('user_id')->unsigned()->index();
             $table->foreign('user_id')->references('id')->on('users');
-            $table->bigInteger('payment_id')->unsigned()->index();
-            $table->foreign('payment_id')->references('id')->on('payments');
-            $table->string('payment_type');
+            $table->morphs('payment');
             $table->enum('status', ['approved', 'disapproved']);
             $table->timestamps();
             $table->softDeletes($column = 'deleted_at', $precision = 0);

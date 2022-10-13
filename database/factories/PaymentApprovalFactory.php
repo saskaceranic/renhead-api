@@ -3,6 +3,7 @@
 namespace Database\Factories;
 
 use App\Models\Payment;
+use App\Models\TravelPayment;
 use App\Models\User;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
@@ -18,10 +19,21 @@ class PaymentApprovalFactory extends Factory
      */
     public function definition()
     {
+        $notable = $this->faker->randomElement([
+            [
+                'id' => Payment::all()->random(),
+                'type' => Payment::class,
+            ],
+            [
+                'id' => TravelPayment::all()->random(),
+                'type' => TravelPayment::class,
+            ]
+        ]);
+
         return [
             'user_id' => User::inRandomOrder()->where('type', 'approver')->first()->id,
-            'payment_id' => Payment::inRandomOrder()->first()->id,
-            'payment_type' => fake()->word,
+            'payment_id' => $notable['id'],
+            'payment_type' => $notable['type'],
             'status' => fake()->randomElement(['approved', 'disapproved'])
         ];
     }

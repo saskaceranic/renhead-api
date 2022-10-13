@@ -9,7 +9,9 @@ use App\Http\Requests\StorePaymentApprovalRequest;
 use App\Http\Requests\UpdatePaymentApprovalRequest;
 use App\Http\Resources\PaymentApprovalCollection;
 use App\Http\Resources\PaymentApprovalResource;
+use App\Models\Payment;
 use App\Models\PaymentApproval;
+use App\Models\TravelPayment;
 use Illuminate\Http\Resources\Json\JsonResource;
 use Illuminate\Http\Response;
 use Illuminate\Support\Facades\Auth;
@@ -38,7 +40,7 @@ class PaymentApprovalController extends Controller
      */
     public function __construct(PaymentApprovalRepository $approvalRepository)
     {
-        $this->middleware('type:admin', ['except' => ['paymentApproval']]);
+//        $this->middleware('type:admin', ['except' => ['paymentApproval']]);
         $this->approvalRepository = $approvalRepository;
     }
 
@@ -57,8 +59,9 @@ class PaymentApprovalController extends Controller
     public function index()
     {
         try {
-            $paymentApproval = PaymentApproval::with(['user', 'payment', 'travelPayments'])->paginate();
+            $paymentApproval = PaymentApproval::with('user', 'payment')->paginate();
         } catch (\Exception $e) {
+            dd($e);
             return response()->json([
                 'message' => Response::$statusTexts[Response::HTTP_NOT_FOUND],
                 'code' => Response::HTTP_NOT_FOUND
@@ -304,7 +307,7 @@ class PaymentApprovalController extends Controller
      *
      * @return PaymentApprovalResource|\Illuminate\Http\JsonResponse
      */
-    public function paymentApproval(InsertPaymentApprovalRequest $request)
+    public function paymentApproval($type, InsertPaymentApprovalRequest $request)
     {
         $user = Auth::user();
 
@@ -317,7 +320,8 @@ class PaymentApprovalController extends Controller
 
         try {
             $approval = $this->approvalRepository->insertPaymentApproval(
-                $user->id,
+                $type,
+                $user,
                 $request->only('payment_id', 'payment_type', 'status')
             );
         } catch (\Exception $e) {

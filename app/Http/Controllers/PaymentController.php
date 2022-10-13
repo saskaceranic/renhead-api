@@ -9,6 +9,7 @@ use App\Http\Resources\PaymentCollection;
 use App\Http\Resources\PaymentReportCollection;
 use App\Http\Resources\PaymentResource;
 use App\Models\Payment;
+use App\Models\PaymentApproval;
 use Illuminate\Http\Resources\Json\JsonResource;
 use Illuminate\Http\Response;
 
@@ -37,7 +38,7 @@ class PaymentController extends Controller
      */
     public function __construct(PaymentRepository $paymentRepository)
     {
-        $this->middleware('type:admin');
+//        $this->middleware('type:admin');
         $this->paymentRepository = $paymentRepository;
     }
 

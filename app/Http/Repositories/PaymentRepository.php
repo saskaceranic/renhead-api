@@ -16,7 +16,6 @@ class PaymentRepository
 {
     public function getSumOfApprovedPayments()
     {
-        dd(PaymentApproval::with(['payment', 'travelPayments'])->take(2)->get());
         $approvals = PaymentApproval::with('travelPayments')->groupBy('payment_id')
             ->having('status', 'approved');
 

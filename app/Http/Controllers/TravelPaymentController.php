@@ -27,7 +27,7 @@ class TravelPaymentController extends Controller
      */
     public function __construct()
     {
-        $this->middleware('type:admin');
+//        $this->middleware('type:admin');
     }
 
     /**
@@ -102,7 +102,7 @@ class TravelPaymentController extends Controller
     }
 
     /**
-     * @param TravelPayment $payment
+     * @param TravelPayment $travelPayment
      *
      * @OA\Get(
      *     path="/travel-payments/{id}",
@@ -125,9 +125,9 @@ class TravelPaymentController extends Controller
      *
      * @return TravelPaymentResource
      */
-    public function show(TravelPayment $payment)
+    public function show(TravelPayment $travelPayment)
     {
-        return new TravelPaymentResource($payment);
+        return new TravelPaymentResource($travelPayment);
     }
 
     /**

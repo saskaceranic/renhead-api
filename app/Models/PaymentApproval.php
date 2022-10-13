@@ -23,12 +23,7 @@ class PaymentApproval extends Model
 
     public function payment()
     {
-        return $this->belongsTo(Payment::class);
-    }
-
-    public function travelPayments()
-    {
-        return $this->belongsTo(TravelPayment::class);
+        return $this->morphTo(__FUNCTION__, 'payment_type', 'payment_id');
     }
 
     public function scopeApprovedPayments($query)
