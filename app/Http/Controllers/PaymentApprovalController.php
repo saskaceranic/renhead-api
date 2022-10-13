@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Repositories\PaymentApprovalRepository;
 use App\Http\Repositories\PaymentRepository;
 use App\Http\Requests\InsertPaymentApprovalRequest;
 use App\Http\Requests\StorePaymentApprovalRequest;
@@ -28,17 +29,17 @@ class PaymentApprovalController extends Controller
     /**
      * @var PaymentRepository
      */
-    protected $paymentRepository;
+    protected $approvalRepository;
 
     /**
      * PaymentApprovalController constructor.
      *
-     * @param PaymentRepository $paymentRepository
+     * @param PaymentApprovalRepository $approvalRepository
      */
-    public function __construct(PaymentRepository $paymentRepository)
+    public function __construct(PaymentApprovalRepository $approvalRepository)
     {
         $this->middleware('type:admin', ['except' => ['paymentApproval']]);
-        $this->paymentRepository = $paymentRepository;
+        $this->approvalRepository = $approvalRepository;
     }
 
     /**
@@ -315,7 +316,7 @@ class PaymentApprovalController extends Controller
         }
 
         try {
-            $approval = $this->paymentRepository->insertPaymentApproval(
+            $approval = $this->approvalRepository->insertPaymentApproval(
                 $user->id,
                 $request->only('payment_id', 'payment_type', 'status')
             );

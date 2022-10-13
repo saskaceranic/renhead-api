@@ -14,24 +14,9 @@ use App\Models\PaymentApproval;
  */
 class PaymentRepository
 {
-    /**
-     * @param $userID
-     * @param $data
-     *
-     * @return mixed
-     */
-    public function insertPaymentApproval($userID, $data)
-    {
-        return PaymentApproval::create([
-            'user_id' => $userID,
-            'payment_id' => $data['payment_id'],
-            'payment_type' => $data['payment_type'],
-            'status' => $data['status']
-        ]);
-    }
-
     public function getSumOfApprovedPayments()
     {
+        dd(PaymentApproval::with(['payment', 'travelPayments'])->take(2)->get());
         $approvals = PaymentApproval::with('travelPayments')->groupBy('payment_id')
             ->having('status', 'approved');
 
