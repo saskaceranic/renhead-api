@@ -21,7 +21,7 @@ class PaymentApproval extends Model
         return $this->belongsTo(User::class);
     }
 
-    public function payment()
+    public function paymentable()
     {
         return $this->morphTo(__FUNCTION__, 'payment_type', 'payment_id');
     }

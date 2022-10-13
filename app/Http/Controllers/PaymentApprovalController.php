@@ -9,9 +9,7 @@ use App\Http\Requests\StorePaymentApprovalRequest;
 use App\Http\Requests\UpdatePaymentApprovalRequest;
 use App\Http\Resources\PaymentApprovalCollection;
 use App\Http\Resources\PaymentApprovalResource;
-use App\Models\Payment;
 use App\Models\PaymentApproval;
-use App\Models\TravelPayment;
 use Illuminate\Http\Resources\Json\JsonResource;
 use Illuminate\Http\Response;
 use Illuminate\Support\Facades\Auth;
@@ -40,7 +38,7 @@ class PaymentApprovalController extends Controller
      */
     public function __construct(PaymentApprovalRepository $approvalRepository)
     {
-//        $this->middleware('type:admin', ['except' => ['paymentApproval']]);
+        $this->middleware('type:admin', ['except' => ['paymentApproval']]);
         $this->approvalRepository = $approvalRepository;
     }
 
@@ -59,7 +57,7 @@ class PaymentApprovalController extends Controller
     public function index()
     {
         try {
-            $paymentApproval = PaymentApproval::with('user', 'payment')->paginate();
+            $paymentApproval = PaymentApproval::with('user', 'paymentable')->paginate();
         } catch (\Exception $e) {
             dd($e);
             return response()->json([
@@ -265,6 +263,7 @@ class PaymentApprovalController extends Controller
 
     /**
      * @param InsertPaymentApprovalRequest $request
+     * @param $type
      *
      * @OA\Post(
      *     path="/payment/approval",
@@ -298,7 +297,7 @@ class PaymentApprovalController extends Controller
      *                     property="status",
      *                     description="Status",
      *                     type="string",
-     *                     enum={"approver", "admin"}
+     *                     enum={"approved", "disapproved"}
      *                 ),
      *             )
      *         )

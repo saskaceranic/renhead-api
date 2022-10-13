@@ -18,5 +18,6 @@ class DatabaseSeeder extends Seeder
         $this->call(TravelPaymentSeeder::class);
         $this->call(PaymentApprovalSeeder::class);
         $this->call(AuthTokenSeeder::class);
+        $this->call(AdminUserSeeder::class);
     }
 }

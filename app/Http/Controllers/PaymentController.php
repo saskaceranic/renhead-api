@@ -38,7 +38,7 @@ class PaymentController extends Controller
      */
     public function __construct(PaymentRepository $paymentRepository)
     {
-//        $this->middleware('type:admin');
+        $this->middleware('type:admin');
         $this->paymentRepository = $paymentRepository;
     }
 
@@ -252,6 +252,7 @@ class PaymentController extends Controller
         try {
             $report = $this->paymentRepository->getSumOfApprovedPayments();
         } catch (\Exception $e) {
+            dd($e);
             return response()->json([
                 'message' => Response::$statusTexts[Response::HTTP_BAD_REQUEST],
                 'code' => Response::HTTP_BAD_REQUEST

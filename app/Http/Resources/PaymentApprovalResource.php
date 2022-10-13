@@ -17,7 +17,7 @@ class PaymentApprovalResource extends JsonResource
         return [
             'id' => $this->id,
             'user' => new UserResource($this->user),
-            'payment' => $this->payment,
+            'paymentable' => $this->paymentable,
             'payment_type' => $this->payment_type,
             'status' => $this->status,
         ];

@@ -34,7 +34,7 @@ class PaymentApprovalRepository
             $payment = TravelPayment::find($data['payment_id']);
         }
 
-        if ($payment == null) {
+        if ($payment === null) {
             throw new NotFoundResourceException();
         }
 
@@ -43,7 +43,7 @@ class PaymentApprovalRepository
             'status' => $data['status']
         ]);
 
-        $approval->payment()->associate($payment);
+        $approval->paymentable()->associate($payment);
         $approval->save();
 
         return $approval;

@@ -19,7 +19,7 @@ class PaymentApprovalFactory extends Factory
      */
     public function definition()
     {
-        $notable = $this->faker->randomElement([
+        $paymentable = $this->faker->randomElement([
             [
                 'id' => Payment::all()->random(),
                 'type' => Payment::class,
@@ -32,8 +32,8 @@ class PaymentApprovalFactory extends Factory
 
         return [
             'user_id' => User::inRandomOrder()->where('type', 'approver')->first()->id,
-            'payment_id' => $notable['id'],
-            'payment_type' => $notable['type'],
+            'payment_id' => $paymentable['id'],
+            'payment_type' => $paymentable['type'],
             'status' => fake()->randomElement(['approved', 'disapproved'])
         ];
     }

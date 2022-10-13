@@ -6,6 +6,8 @@ namespace App\Http\Repositories;
 
 use App\Models\Payment;
 use App\Models\PaymentApproval;
+use App\Models\TravelPayment;
+use Illuminate\Database\Eloquent\Builder;
 
 /**
  * Class PaymentApprovalRepository
@@ -16,12 +18,15 @@ class PaymentRepository
 {
     public function getSumOfApprovedPayments()
     {
-        $approvals = PaymentApproval::with('travelPayments')->groupBy('payment_id')
-            ->having('status', 'approved');
+        $test = PaymentApproval::whereHasMorph('paymentable', [Payment::class, TravelPayment::class],
+            function (Builder $query) {
+                $query->groupBy('payment_id')
+                    ->having('status', 'approved');
+            });
 
         $payments = Payment::with('user')
             ->selectRaw('*, SUM(total_amount) as sum_amount')
-            ->joinSub($approvals, 'pa', function ($join) {
+            ->joinSub($test, 'pa', function ($join) {
                 $join->on('payments.id', '=', 'pa.payment_id');
             })
             ->groupBy('pa.user_id')

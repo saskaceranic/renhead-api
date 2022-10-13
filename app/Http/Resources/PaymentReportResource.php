@@ -16,10 +16,7 @@ class PaymentReportResource extends JsonResource
     {
         return [
             'user' => new UserResource($this->user),
-            'payment_type' => $this->payment_type,
-            'sum_amount' => $this->sum_amount,
-            'payment' => $this->payment
-//            'travel_payments' => new TravelPaymentResource($this->travel_payments),
+            'sum_amount' => $this->sum_amount
         ];
     }
 }
